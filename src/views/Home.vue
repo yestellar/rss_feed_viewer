@@ -107,6 +107,8 @@ export default {
       border-radius: 5px
       border: 1px solid #c7c7c7
       margin-right: 5px
+      &:focus
+        border-color: lightblue
     &--button
       height: 26px
       width: 52px
@@ -114,15 +116,6 @@ export default {
       background-color: #fff
       border: 1px solid #c7c7c7
       position: relative
-      // &::before
-      //   content: ''
-      //   display: block
-      //   width: 100%
-      //   height: 100%
-      //   background-image: url('../assets/img/icons/eye.svg')
-      //   background-size: 100% 90%
-      //   background-repeat: no-repeat
-      //   background-position: 50% 50%
       &:hover
         border-color: lightblue
         cursor: pointer

@@ -3,7 +3,7 @@
   <div class="feed">
     <br>
     <!-- feed header -->
-    <div class="feed__header" v-if="allPosts">
+    <div class="feed__header" v-if="posts">
       <div class="feed__header--description">
         {{feedHead.title}} <span class="Y" v-if="feedHead.description">////</span> {{feedHead.description}}
         <!-- feed panel -->
@@ -22,7 +22,7 @@
       <!-- end of feed header -->
     </div>
     <!-- feed posts -->
-    <div class="feed__post" v-for="(post, index) in showedPosts" :key="index">
+    <div class="feed__post" v-for="(post, index) in filteredPosts" :key="index">
       <img class="feed__post--image" :src="post.enclosure.link">
       <div class="feed__post--text-container">
         <div class="feed__post--category-name">
@@ -45,10 +45,7 @@ export default {
   name: 'FeedPreview',
   props: ['url'],
   data: () => ({
-    // allPosts is an array with all posts that has been returned from rss link
-    allPosts: "",
-    // showedPosts this is an array with posts that passed the search filter
-    showedPosts: "",
+    posts: "",
     feedHead: "",
     searchInput: ""
   }),
@@ -59,7 +56,7 @@ export default {
         .then(json => {
           if (json.status === 'ok') {
             console.log(json)
-            this.allPosts = this.showedPosts = json.items
+            this.posts = json.items
             this.feedHead = json.feed
           } else {
             throw new Error();
@@ -68,17 +65,16 @@ export default {
         .catch(() => {
           this.$emit('error-handler', 'Unable to get data. Invalid rss link')
         })
-    },
-    findPosts() {
-      this.showedPosts = this.allPosts.filter(post => post.title.toLowerCase().indexOf(this.searchInput.toLowerCase()) !== -1)
+    }
+  },
+  computed: {
+    filteredPosts: function() {
+      if (this.posts) return this.posts.filter(post => post.title.toLowerCase().indexOf(this.searchInput.toLowerCase()) !== -1)
     }
   },
   watch: {
     url: function() {
       this.fetchData()
-    },
-    searchInput: function() {
-      this.findPosts()
     }
   }
 }
@@ -194,11 +190,6 @@ export default {
         font-size: 18px
         letter-spacing: 1px
         transform: translateY(12px)
-      &--pub-date
-        position: absolute
-        bottom: 0
-        right: 0
-        font-weight: 300
       &--link
         position: absolute
         width: 100%
