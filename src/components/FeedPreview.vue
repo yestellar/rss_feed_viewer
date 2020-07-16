@@ -59,7 +59,7 @@ export default {
             this.posts = json.items
             this.feedHead = json.feed
           } else {
-            throw new Error();
+            throw new Error()
           }
         })
         .catch(() => {
